@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Import Progress UI</title>
+  <style>
+    /* Your existing CSS styles here */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body styling */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f0f4ff;
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+
+    /* Container styling */
+    .progress-container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      width: 100%;
+      max-width: 600px;
+      text-align: left;
+      border-left: 4px solid #5865f2;
+    }
+
+    /* Title styling */
+    .title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: #3b4b72;
+    }
+
+    /* Status and progress styling */
+    .status {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    /* Progress bar styling */
+    .progress-bar {
+      background-color: #e0e0e0;
+      height: 12px;
+      width: 100%;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+
+    .progress-fill {
+      background-color: #5865f2;
+      height: 100%;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    /* Details section */
+    .details {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    /* Button styling */
+    .button-container {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .button {
+      padding: 10px 18px;
+      font-size: 0.9rem;
+      border-radius: 5px;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.2s ease;
+    }
+
+    .add-button {
+      background-color: #5865f2;
+      color: #fff;
+    }
+
+    .stop-button {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    .add-button:hover {
+      background-color: #4754d9;
+    }
+
+    .stop-button:hover {
+      background-color: #c0392b;
+    }
+
+    /* Close button styling */
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2rem;
+      color: #aaa;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .close-btn:hover {
+      color: #666;
+    }
+
+    /* Responsive design */
+    @media (max-width: 480px) {
+      .progress-container {
+        padding: 20px;
+      }
+      .button {
+        font-size: 0.85rem;
+        padding: 8px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="progress-container">
+  <!-- Close Button -->
+  <span class="close-btn" onclick="closeWindow()">&times;</span>
+
+  <!-- Title -->
+  <div class="title">Importing <span id="row-count">0</span> Prospects Into QONVO - ICP1</div>
+
+  <!-- Progress Status -->
+  <div class="status">0% Done</div>
+
+  <!-- Progress Bar -->
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+
+  <!-- Details -->
+  <div class="details" id="import-details">
+    0 scanned, 0 success, 0 duplicates, 0 false positives
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="button-container">
+    <button class="button add-button" onclick="addToCampaign()">Add this import to a campaign</button>
+    <button class="button stop-button" onclick="stopImport()">Stop Import</button>
+  </div>
+</div>
+
+<script>
+let interval;
+
+function closeWindow() {
+    window.close();
+}
+
+function stopImport() {
+    clearInterval(interval);
+    document.querySelector('.status').textContent = "Import stopped.";
+}
+
+function startImport() {
+    const csvData = JSON.parse(sessionStorage.getItem('csvData'));
+    if (!csvData || csvData.length === 0) {
+        alert("No CSV data found.");
+        return;
+    }
+
+    document.getElementById('row-count').textContent = csvData.length;
+
+    let scanned = 0, success = 0;
+
+    interval = setInterval(() => {
+        if (scanned < csvData.length) {
+            const row = csvData[scanned];
+            scanned++;
+
+            // Each row is counted as a success
+            success++;
+
+            // Update the progress bar and status text
+            document.querySelector('.status').textContent = `${Math.round((scanned / csvData.length) * 100)}% Done`;
+            document.getElementById('progress-fill').style.width = `${(scanned / csvData.length) * 100}%`;
+            document.getElementById('import-details').textContent = `${scanned} scanned, ${success} success, 0 duplicates, 0 false positives`;
+
+        } else {
+            clearInterval(interval);
+            console.log("Import completed.");
+        }
+    }, 100);
+}
+
+function addToCampaign() {
+    const csvData = JSON.parse(sessionStorage.getItem('csvData'));
+
+    if (csvData && csvData.length > 0) {
+        // Route to the new page with the CSV data in sessionStorage
+        window.location.href = "selectColumns.html";
+    } else {
+        alert("No CSV data to add to campaign.");
+    }
+}
+
+// Start the import process when the page loads
+window.onload = startImport;
+</script>
+
+</body>
+</html>
