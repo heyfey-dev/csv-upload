@@ -234,9 +234,9 @@
 
     try {
       for (let record of dataToUpload) {
-        await fetch('https://cors-anywhere.herokuapp.com/https://api.airtable.com/v0/appiAaV6gdbGI8A6X./Projects', {
-
+        await fetch('https://api.airtable.com/appiAaV6gdbGI8A6X./Projects', {
           method: 'POST',
+          mode: 'no-cors',
           headers: {
             'Authorization': 'Bearer pat42y4fucbCTHxBm.857e4b0a0ec1a8d5f390aed940c0b066c572f3584aa38c2db6db1cb982bf1de3',
             'Content-Type': 'application/json'
