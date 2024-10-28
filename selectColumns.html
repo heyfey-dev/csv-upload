@@ -220,6 +220,7 @@ select {
         for (let record of dataToUpload) {
           const response = await fetch(`https://api.airtable.com/v0/appg7PPNCirG2MeO3/Projects`, {
             method: 'POST',
+            mode: 'cors',
             headers: {
               'Authorization': 'Bearer patx8tbuYrijnfUEF',
               'Content-Type': 'application/json'
