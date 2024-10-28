@@ -234,11 +234,11 @@
 
     try {
       for (let record of dataToUpload) {
-        await fetch('https://api.airtable.com/appiAaV6gdbGI8A6X/Projects', {
+        await fetch('https://api.airtable.com/appg7PPNCirG2MeO3/Client Leads Import', {
           method: 'POST',
           mode: 'no-cors',
           headers: {
-            'Authorization': 'Bearer patQGA2BHjJSkYdVN.5491a05d100c46d979d194fe4f4538b546f9326bca8ab5fcb4c0a2dbacda90f3',
+            'Authorization': 'Bearer patkFSYcSy8lag2Xo',
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({ fields: record })
