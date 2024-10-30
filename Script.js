@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to add data to the table
-    async function addToTable() {
+    function addToTable() {
         const selectedPhone = document.getElementById('phone-select')?.value;
         const selectedFirstName = document.getElementById('firstname-select')?.value;
 
@@ -115,4 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error adding data to MongoDB:', error);
         }
     }
+
+    // Expose addToTable to global scope
+    window.addToTable = addToTable;
 });
