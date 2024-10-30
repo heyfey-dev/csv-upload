@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to add data to the table
-    function addToTable() {
+    async function addToTable() {  // Made async
         const selectedPhone = document.getElementById('phone-select')?.value;
         const selectedFirstName = document.getElementById('firstname-select')?.value;
 
